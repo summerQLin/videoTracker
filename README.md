@@ -20,3 +20,19 @@ cd contactlistapp
 npm install
 set DEBUG=myapp:* & npm start  //windows command to start the server
 ```
+
+Start mongo db
+```
+mongod //to start mongo service
+mongo  //mongo db command
+  show dbs //show all the databases
+  use contactlist  //switch to contactlist db
+  db.contactlist.insert({name: 'Tom', email: 'tom@testemail.com', number: '(444)333-4444'}) //insert a record
+  db.contactlist.find().pretty()
+  db.contactlist.insert([{name: , email: , number: }, {...}, {...}])
+```  
+
+Connection nodejs app with mongodb
+```
+npm install mongodb --save
+```
