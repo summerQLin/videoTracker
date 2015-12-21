@@ -3,3 +3,17 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  block contactlist
+    div(class='container', ng-controller='AppCtrl')
+      table(class='table')
+        thead
+          tr
+            th Name
+            th Email
+            th Number
+        tbody
+          tr(ng-repeat='contact in contactlist')
+            td {{contact.name}}
+            td {{contact.email}}
+            td {{contact.number}}
+

@@ -13,4 +13,10 @@ touch app.js  //and write code
 node app.js  //to start the server
 
 ```
-OR directly create a
+OR directly create a express app
+```
+express contactlistapp
+cd contactlistapp
+npm install
+set DEBUG=myapp:* & npm start  //windows command to start the server
+```
