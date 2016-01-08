@@ -6,12 +6,16 @@ var ObjectID = require('mongodb').ObjectID;
 var merge = require('merge');
 
 router.post('/insert', function(req, res, next) {
-	var newRecord
-	if(req.query.data){
-		newRecord = JSON.parse(req.query.data)
+	 //JSON type
+	var newRecord ={}
+	console.log(req.body)
+	if(req.body){
+		newRecord = req.body
 	} else {
 		res.status(500).send({error: "No data receieved!"})
 	}
+	//insert {'download_start': new Date()}
+	merge(newRecord, {"download_start_time":new Date()})
 	try{
 		MongoClient.connect(url, function(err, db) {
 			db.collection('records').insertOne(newRecord, function(err, doc){
@@ -27,12 +31,14 @@ router.post('/insert', function(req, res, next) {
 });
 
 router.put('/update/:action/:state/:id', function(req, res, next) {
+	//:action   download/upload
+	//:state  end/start
 	if(!req.params.action || !req.params.state || !req.params.id) {
 		res.status(500).send({error: "You should tell me what's your action, state and record's id you wanna update"})
 	}
 	var updateData = {}
-	if(req.query.data) {
-		updateData = JSON.parse(req.query.data)
+	if(req.body) {
+		updateData = req.body
 	}
     //add a column download_end_time OR upload_start_time OR upload_end_time 
     var timeFlagKey = req.params.action + "_" + req.params.state + "_time"
