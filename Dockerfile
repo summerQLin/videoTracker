@@ -1,12 +1,11 @@
 FROM node:0.12.7
 MAINTAINER summer <qinglin9@gmail.com>
 
+COPY app ./usr/src/app
+WORKDIR /usr/src/app
+
 RUN npm install
 
-VOLUME ["/usr/src/app"]
-
-EXPOSE 4000
-
-WORKDIR /usr/src/app
+EXPOSE 3000
 
 CMD ["npm", "start"]

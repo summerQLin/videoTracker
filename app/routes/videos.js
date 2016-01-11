@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/downloadtracks';
+var url = 'mongodb://db:27017/downloadtracks';
 var ObjectID = require('mongodb').ObjectID;
 var merge = require('merge');
 
@@ -18,6 +18,7 @@ router.post('/insert', function(req, res, next) {
 	merge(newRecord, {"download_start_time":new Date()})
 	try{
 		MongoClient.connect(url, function(err, db) {
+                        if (err) throw err
 			db.collection('records').insertOne(newRecord, function(err, doc){
 				if(err) {
 					throw err
