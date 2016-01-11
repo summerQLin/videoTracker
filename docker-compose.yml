@@ -1,0 +1,13 @@
+db:
+  image: mongo:3.0.7
+  volumes:
+    - /home/ubuntu/event-mongo-data:/data 
+node:
+  dockerfile: ./Dockerfile
+  build: .
+  volumes:
+    - .:/usr/src/app 
+  ports:
+    - "80:4000"
+  links:
+    - db
