@@ -85,7 +85,7 @@ router.get('/', function(req, res,next){
 router.get('/:id', function(req, res,next){
 	try{
 		MongoClient.connect(url, function(err, db) {
-			db.collection('records').findOne({"_id":new ObjectID(req.params.id)}, function(err, doc){
+			db.collection('records').findOne({"_id":ObjectID(req.params.id)}, function(err, doc){
 				if(err) throw err
 					if (doc){
 						res.status(200).json(doc)
