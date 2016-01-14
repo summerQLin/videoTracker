@@ -46,10 +46,11 @@ router.put('/update/:action/:state/:id', function(req, res, next) {
     updateData[timeFlagKey] = new Date()
 
     try{
+    	var objID = ObjectID(req.params.id)
     	MongoClient.connect(url, function(err, db) {
     		if (err) throw err
     		db.collection('records').updateOne(
-    			{"_id":new ObjectID(req.params.id)},
+    			{"_id":objID},
     			{
     				$set: updateData
     			}, 
@@ -90,7 +91,7 @@ router.get('/', function(req, res,next){
 
 router.delete('/:id', function(req, res, next){
 	try{
-		objID = ObjectID(req.params.id)
+		var objID = ObjectID(req.params.id)
 		MongoClient.connect(url, function(err, db){
 			db.collection('records').deleteOne({"_id":objID}, function(err, doc){
 				if(err) throw err
@@ -107,7 +108,7 @@ router.delete('/:id', function(req, res, next){
 
 router.get('/:id', function(req, res,next){
 	try{
-		objID = ObjectID(req.params.id)
+		var objID = ObjectID(req.params.id)
 		MongoClient.connect(url, function(err, db) {
 			if(err) throw err
 			db.collection('records').findOne({"_id":objID}, function(err, doc){
