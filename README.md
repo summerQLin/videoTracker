@@ -24,15 +24,18 @@ return
 **DELETE** /videos/568f5e084d55d78015ffc890
 
 return 200
+```
 	{
 	  "ok": 1,
 	  "n": 0
 	}
+```
 
 **DELETE** /videos    -----delete all
 return 200
+```
 	{
 	  "ok": 1,
 	  "n": 4
 	}
-
+```
