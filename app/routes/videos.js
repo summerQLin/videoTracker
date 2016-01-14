@@ -8,7 +8,6 @@ var merge = require('merge');
 router.post('/insert', function(req, res, next) {
 	 //JSON type
 	var newRecord ={}
-	console.log(req.body)
 	if(req.body){
 		newRecord = req.body
 	} else {
@@ -18,11 +17,9 @@ router.post('/insert', function(req, res, next) {
 	merge(newRecord, {"download_start_time":new Date()})
 	try{
 		MongoClient.connect(url, function(err, db) {
-                        if (err) throw err
+            if (err) throw err
 			db.collection('records').insertOne(newRecord, function(err, doc){
-				if(err) {
-					throw err
-				}
+				if(err) throw err
 				if (doc){
 					db.close()
 					res.status(200).json({"id":doc["ops"][0]["_id"]})
@@ -50,6 +47,7 @@ router.put('/update/:action/:state/:id', function(req, res, next) {
 
     try{
     	MongoClient.connect(url, function(err, db) {
+    		if (err) throw err
     		db.collection('records').updateOne(
     			{"_id":new ObjectID(req.params.id)},
     			{
@@ -73,16 +71,17 @@ router.get('/', function(req, res,next){
 	var results = []
 	try{
 		MongoClient.connect(url, function(err, db) {
+			if (err) throw err
 			var cursor = db.collection('records').find()
 			cursor.each(function(err, doc){
 				if(err) throw err
-					if (doc){
-						results.push(doc)
-					}else{
-						db.close()
-						res.status(200).json(results)
-					}
-				})
+				if (doc){
+					results.push(doc)
+				}else{
+					db.close()
+					res.status(200).json(results)
+				}
+			})
 			})
 		}catch(e){
 			res.status(500).send({error: e.message})
@@ -91,8 +90,9 @@ router.get('/', function(req, res,next){
 
 router.delete('/:id', function(req, res, next){
 	try{
+		objID = ObjectID(req.params.id)
 		MongoClient.connect(url, function(err, db){
-			db.collection('records').deleteOne({"_id":ObjectID(req.params.id)}, function(err, doc){
+			db.collection('records').deleteOne({"_id":objID}, function(err, doc){
 				if(err) throw err
 			    if (doc) {
 					db.close()
@@ -107,8 +107,10 @@ router.delete('/:id', function(req, res, next){
 
 router.get('/:id', function(req, res,next){
 	try{
+		objID = ObjectID(req.params.id)
 		MongoClient.connect(url, function(err, db) {
-			db.collection('records').findOne({"_id":ObjectID(req.params.id)}, function(err, doc){
+			if(err) throw err
+			db.collection('records').findOne({"_id":objID}, function(err, doc){
 				if(err) throw err
 					if (doc){
 						db.close()
