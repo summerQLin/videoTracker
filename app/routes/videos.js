@@ -6,7 +6,7 @@ var ObjectID = require('mongodb').ObjectID;
 var merge = require('merge');
 
 router.post('/insert', function(req, res, next) {
-	 //JSON type
+	
 	var newRecord ={}
 	if(req.body){
 		newRecord = req.body
@@ -19,9 +19,9 @@ router.post('/insert', function(req, res, next) {
 		MongoClient.connect(url, function(err, db) {
             if (err) throw err
 			db.collection('records').insertOne(newRecord, function(err, doc){
+				db.close()
 				if(err) throw err
 				if (doc){
-					db.close()
 					res.status(200).json({"id":doc["ops"][0]["_id"]})
 				}
 			})
@@ -55,9 +55,9 @@ router.put('/update/:action/:state/:id', function(req, res, next) {
     				$set: updateData
     			}, 
     			function(err, doc){
+    				db.close()
     				if(err) throw err
     				if(doc){
-    			    	db.close()
     					res.status(200).send()		
     				}
     			}
@@ -75,11 +75,11 @@ router.get('/', function(req, res,next){
 			if (err) throw err
 			var cursor = db.collection('records').find()
 			cursor.each(function(err, doc){
+				db.close()
 				if(err) throw err
 				if (doc){
 					results.push(doc)
 				}else{
-					db.close()
 					res.status(200).json(results)
 				}
 			})
@@ -94,9 +94,9 @@ router.delete('/:id', function(req, res, next){
 		var objID = ObjectID(req.params.id)
 		MongoClient.connect(url, function(err, db){
 			db.collection('records').deleteOne({"_id":objID}, function(err, doc){
+				db.close()
 				if(err) throw err
 			    if (doc) {
-					db.close()
 					res.status(200).json(doc)
 				}
 			})
@@ -110,9 +110,9 @@ router.delete('/', function(req, res, next){
 	try{
 		MongoClient.connect(url, function(err, db){
 			db.collection('records').deleteMany({}, function(err, doc){
+				db.close()
 				if(err) throw err
 			    if (doc) {
-					db.close()
 					res.status(200).json(doc)
 				}
 			})
@@ -128,11 +128,11 @@ router.get('/:id', function(req, res,next){
 		MongoClient.connect(url, function(err, db) {
 			if(err) throw err
 			db.collection('records').findOne({"_id":objID}, function(err, doc){
+				db.close()
 				if(err) throw err
-					if (doc){
-						db.close()
-						res.status(200).json(doc)
-					}
+				if (doc){
+					res.status(200).json(doc)
+				}
 			})
 		})
 		}catch(e){
