@@ -9,8 +9,8 @@ return 200 {"id":xxxx}
        
 **PUT** 
  * /videos/update/download/end/568f5e084d55d78015ffc890  -d {"file_size":"50M", "file_path":"/Downloads/video.mv", "download_status":true, "download_msg":"complete"}
- * /videos/upload/start/568f5e084d55d78015ffc890  
- * /videos/upload/end/568f5e084d55d78015ffc890   -d {"upload_status":true, "upload_msg":"complete"}
+ * /videos/update/upload/start/568f5e084d55d78015ffc890  
+ * /videos/update/upload/end/568f5e084d55d78015ffc890   -d {"upload_status":true, "upload_msg":"complete"}
                   
 return 
   * 200 //update successfully
