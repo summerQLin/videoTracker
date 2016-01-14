@@ -23,7 +23,10 @@ router.post('/insert', function(req, res, next) {
 				if(err) {
 					throw err
 				}
-				res.status(200).json({"id":doc["ops"][0]["_id"]})
+				if (doc){
+					db.close()
+					res.status(200).json({"id":doc["ops"][0]["_id"]})
+				}
 			})
 		})
 	}catch(e){
@@ -54,7 +57,10 @@ router.put('/update/:action/:state/:id', function(req, res, next) {
     			}, 
     			function(err, doc){
     				if(err) throw err
-    					res.status(200).send()
+    				if(doc){
+    			    	db.close()
+    					res.status(200).send()		
+    				}
     			}
     			)
     	})
@@ -73,6 +79,7 @@ router.get('/', function(req, res,next){
 					if (doc){
 						results.push(doc)
 					}else{
+						db.close()
 						res.status(200).json(results)
 					}
 				})
@@ -82,12 +89,29 @@ router.get('/', function(req, res,next){
 		}
 });
 
+router.delete('/:id', function(req, res, next){
+	try{
+		MongoClient.connect(url, function(err, db){
+			db.collection('records').deleteOne({"_id":ObjectID(req.params.id)}, function(err, doc){
+				if(err) throw err
+			    if (doc) {
+					db.close()
+					res.status(200).json(doc)
+				}
+			})
+		})
+	}catch(e){
+		res.status(500).send({error: e.message})
+	}
+});
+
 router.get('/:id', function(req, res,next){
 	try{
 		MongoClient.connect(url, function(err, db) {
 			db.collection('records').findOne({"_id":ObjectID(req.params.id)}, function(err, doc){
 				if(err) throw err
 					if (doc){
+						db.close()
 						res.status(200).json(doc)
 					}
 			})
@@ -96,5 +120,6 @@ router.get('/:id', function(req, res,next){
 			res.status(500).send({error: e.message})
 		}
 });
+
 
 module.exports = router;
