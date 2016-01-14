@@ -106,6 +106,22 @@ router.delete('/:id', function(req, res, next){
 	}
 });
 
+router.delete('/', function(req, res, next){
+	try{
+		MongoClient.connect(url, function(err, db){
+			db.collection('records').deleteMany({}, function(err, doc){
+				if(err) throw err
+			    if (doc) {
+					db.close()
+					res.status(200).json(doc)
+				}
+			})
+		})
+	}catch(e){
+		res.status(500).send({error: e.message})
+	}
+});
+
 router.get('/:id', function(req, res,next){
 	try{
 		var objID = ObjectID(req.params.id)
